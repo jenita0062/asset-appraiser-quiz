@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+      <meta name="theme-color" content="#14324b">
+      <meta name="robots" content="noindex,nofollow,noarchive">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="default">
+      <meta name="apple-mobile-web-app-title" content="">
+      <meta name="format-detection" content="telephone=no">
+      <title></title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+<body>
+    <header class="topbar">
+          <div class="brand"><span class="brand-mark"></span>span><div><strong></strong><small> · </small></div></div>
+        <div class="account-actions">
+              <span id="syncStatus" class="sync-status"></span>span>
+              <button id="logoutBtn" class="text-btn hidden"></button>button>
+        </div>
+    </header>header>
+
+  <main class="shell">
+      <section id="loginView" class="view active">
+            <div class="login-card">
+                    <span class="eyebrow"></span>span>
+                    <h1><br></h1>
+                    <p></p>
+                    <form id="loginForm">
+                              <label for="emailInput"></label>label>
+                              <input id="emailInput" type="email" autocomplete="username" required placeholder="">
+                              <label for="passwordInput"></label>label>
+                              <input id="passwordInput" type="password" autocomplete="current-password" required minlength="6" placeholder=" 6 ">
+                              <button id="loginBtn" class="primary-btn" type="submit"></button>button>
+                              <button id="signupBtn" class="secondary-btn full" type="button"></button>button>
+                    </form>form>
+                    <p class="account-hint"></p>
+                    <p id="loginMessage" class="login-message"></p>
+            </div>
+      </section>section>
+  
+      <section id="homeView" class="view">
+            <div class="hero">
+                    <span class="eyebrow">74 </span>span>
+                    <h1><br></h1>
+                    <p></p>
+            </div>
+      
+            <div class="stats-grid">
+                    <div class="stat"><b id="answeredStat">0</b>b><span></span></div>
+                    <div class="stat"><b id="accuracyStat">—</b>b><span></span></div>
+                    <div class="stat"><b id="wrongStat">0</b>b><span></span></div>
+            </div>
+      
+            <section class="panel setup-panel">
+                    <div class="panel-title"><div><small></small><h2></h2></div><span id="poolCount" class="count-pill">0 </span></div>
+            
+                    <label></label>
+                    <div id="subjectChips" class="chips">
+                              <button class="chip active" data-subject=""></button>button>
+                              <button class="chip" data-subject=""></button>button>
+                              <button class="chip" data-subject=""></button>button>
+                    </div>
+            
+                    <label for="chapterSelect"></label>
+                    <select id="chapterSelect"><option value=""></option>option></select>select>
+            
+                    <label></label>
+                    <div id="modeChips" class="mode-grid">
+                              <button class="mode active" data-count="15"><b></b><span>15 </span></button>button>
+                              <button class="mode" data-count="5"><b></b><span>5 </span></button>button>
+                              <button class="mode" data-count="2"><b></b><span>2 </span></button>button>
+                    </div>
+            
+                    <button id="startBtn" class="primary-btn"></button>button>
+                    <div class="secondary-actions">
+                              <button id="wrongBookBtn" class="secondary-btn"> <span id="wrongBadge">0</span></button>button>
+                              <button id="favoriteBtn" class="secondary-btn"> <span id="favoriteBadge">0</span></button>button>
+                    </div>
+            </section>section>
+      
+            <p class="source-note"></p>
+      
+            <button id="resetBtn" class="danger-link"></button>button>
+      </section>section>
+  
+      <section id="quizView" class="view">
+            <div class="quiz-nav">
+                    <button id="backBtn" class="icon-btn" aria-label=""></button>button>
+                    <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+                    <span id="progressText">1/5</span>
+            </div>
+            <div id="questionMeta" class="question-meta"></div>
+            <article class="question-card">
+                    <div class="question-head">
+                              <span id="questionType" class="type-pill"></span>
+                              <button id="starBtn" class="star-btn" aria-label=""></button>button>
+                    </div>
+                    <h2 id="questionText"></h2>
+                    <div id="options" class="options"></div>
+            </article>article>
+            <button id="submitBtn" class="primary-btn sticky" disabled></button>button>
+            <section id="answerPanel" class="answer-panel hidden">
+                    <div id="resultLine" class="result-line"></div>
+                    <div class="answer-row"><span></span><b id="correctAnswer"></b></div>
+                    <h3></h3>
+                    <p id="explanation"></p>
+                    <p id="memory" class="memory hidden"></p>
+                    <p id="source" class="source"></p>
+                    <div class="answer-actions">
+                              <button id="masterBtn" class="secondary-btn hidden"></button>button>
+                              <button id="nextBtn" class="primary-btn"></button>button>
+                    </div>
+            </section>section>
+      </section>section>
+  
+      <section id="resultView" class="view">
+            <div class="result-card">
+                    <div id="resultEmoji" class="result-emoji"></div>
+                    <small></small>
+                    <h1 id="resultScore">4 / 5</h1>
+                    <p id="resultMessage"></p>
+                    <div class="result-stats"><span> <b id="timeUsed">0</b></span><span> <b id="newWrong">0</b></span></div>
+                    <button id="retryWrongBtn" class="primary-btn"></button>button>
+                    <button id="homeBtn" class="secondary-btn full"></button>button>
+            </div>
+      </section>section>
+  </main>main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="cloud.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>html>
+</b></b></label></label></span></span></p></p></h1></small></strong></div>
+</body></title>
+  </head>
