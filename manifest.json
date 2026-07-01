@@ -1,0 +1,23 @@
+{
+  "name": "资产评估师冲刺题库",
+  "short_name": "冲刺题库",
+  "description": "资产评估基础与相关知识必刷题库",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f5ef",
+  "theme_color": "#14324b",
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}{
+    "name": "",
+    "short_name": "",
+    "description": "",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#f7f5ef",
+    "theme_color": "#14324b",
+    "icons": [
+          {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+    ]
+}
