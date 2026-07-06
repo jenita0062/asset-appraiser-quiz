@@ -1,142 +1,116 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-      <meta name="theme-color" content="#14324b">
-      <meta name="robots" content="noindex,nofollow,noarchive">
-      <meta name="apple-mobile-web-app-capable" content="yes">
-      <meta name="apple-mobile-web-app-status-bar-style" content="default">
-      <meta name="apple-mobile-web-app-title" content="">
-      <meta name="format-detection" content="telephone=no">
-      <title></title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="icon.svg">
-    <link rel="stylesheet" href="styles.css">
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#14324b">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="错题题库">
+  <title>资产评估师错题题库</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=4">
+</head>
 <body>
-    <header class="topbar">
-          <div class="brand"><span class="brand-mark"></span>span><div><strong></strong><small> · </small></div></div>
-        <div class="account-actions">
-              <span id="syncStatus" class="sync-status"></span>span>
-              <button id="logoutBtn" class="text-btn hidden"></button>button>
-        </div>
-    </header>header>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">评</span><div><strong>我的错题题库</strong><small>实务一 · 基础 · 相关知识</small></div></div>
+    <button id="resetBtn" class="text-btn">重置记录</button>
+  </header>
 
   <main class="shell">
-      <section id="loginView" class="view active">
-            <div class="login-card">
-                    <span class="eyebrow"></span>span>
-                    <h1><br></h1>
-                    <p></p>
-                    <form id="loginForm">
-                              <label for="emailInput"></label>label>
-                              <input id="emailInput" type="email" autocomplete="username" required placeholder="">
-                              <label for="passwordInput"></label>label>
-                              <input id="passwordInput" type="password" autocomplete="current-password" required minlength="6" placeholder=" 6 ">
-                              <button id="loginBtn" class="primary-btn" type="submit"></button>button>
-                              <button id="signupBtn" class="secondary-btn full" type="button"></button>button>
-                    </form>form>
-                    <p class="account-hint"></p>
-                    <p id="loginMessage" class="login-message"></p>
-            </div>
-      </section>section>
-  
-      <section id="homeView" class="view">
-            <div class="hero">
-                    <span class="eyebrow">74 </span>span>
-                    <h1><br></h1>
-                    <p></p>
-            </div>
-      
-            <div class="stats-grid">
-                    <div class="stat"><b id="answeredStat">0</b>b><span></span></div>
-                    <div class="stat"><b id="accuracyStat">—</b>b><span></span></div>
-                    <div class="stat"><b id="wrongStat">0</b>b><span></span></div>
-            </div>
-      
-            <section class="panel setup-panel">
-                    <div class="panel-title"><div><small></small><h2></h2></div><span id="poolCount" class="count-pill">0 </span></div>
-            
-                    <label></label>
-                    <div id="subjectChips" class="chips">
-                              <button class="chip active" data-subject=""></button>button>
-                              <button class="chip" data-subject=""></button>button>
-                              <button class="chip" data-subject=""></button>button>
-                    </div>
-            
-                    <label for="chapterSelect"></label>
-                    <select id="chapterSelect"><option value=""></option>option></select>select>
-            
-                    <label></label>
-                    <div id="modeChips" class="mode-grid">
-                              <button class="mode active" data-count="15"><b></b><span>15 </span></button>button>
-                              <button class="mode" data-count="5"><b></b><span>5 </span></button>button>
-                              <button class="mode" data-count="2"><b></b><span>2 </span></button>button>
-                    </div>
-            
-                    <button id="startBtn" class="primary-btn"></button>button>
-                    <div class="secondary-actions">
-                              <button id="wrongBookBtn" class="secondary-btn"> <span id="wrongBadge">0</span></button>button>
-                              <button id="favoriteBtn" class="secondary-btn"> <span id="favoriteBadge">0</span></button>button>
-                    </div>
-            </section>section>
-      
-            <p class="source-note"></p>
-      
-            <button id="resetBtn" class="danger-link"></button>button>
-      </section>section>
-  
-      <section id="quizView" class="view">
-            <div class="quiz-nav">
-                    <button id="backBtn" class="icon-btn" aria-label=""></button>button>
-                    <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
-                    <span id="progressText">1/5</span>
-            </div>
-            <div id="questionMeta" class="question-meta"></div>
-            <article class="question-card">
-                    <div class="question-head">
-                              <span id="questionType" class="type-pill"></span>
-                              <button id="starBtn" class="star-btn" aria-label=""></button>button>
-                    </div>
-                    <h2 id="questionText"></h2>
-                    <div id="options" class="options"></div>
-            </article>article>
-            <button id="submitBtn" class="primary-btn sticky" disabled></button>button>
-            <section id="answerPanel" class="answer-panel hidden">
-                    <div id="resultLine" class="result-line"></div>
-                    <div class="answer-row"><span></span><b id="correctAnswer"></b></div>
-                    <h3></h3>
-                    <p id="explanation"></p>
-                    <p id="memory" class="memory hidden"></p>
-                    <p id="source" class="source"></p>
-                    <div class="answer-actions">
-                              <button id="masterBtn" class="secondary-btn hidden"></button>button>
-                              <button id="nextBtn" class="primary-btn"></button>button>
-                    </div>
-            </section>section>
-      </section>section>
-  
-      <section id="resultView" class="view">
-            <div class="result-card">
-                    <div id="resultEmoji" class="result-emoji"></div>
-                    <small></small>
-                    <h1 id="resultScore">4 / 5</h1>
-                    <p id="resultMessage"></p>
-                    <div class="result-stats"><span> <b id="timeUsed">0</b></span><span> <b id="newWrong">0</b></span></div>
-                    <button id="retryWrongBtn" class="primary-btn"></button>button>
-                    <button id="homeBtn" class="secondary-btn full"></button>button>
-            </div>
-      </section>section>
-  </main>main>
+    <section id="homeView" class="view active">
+      <div class="hero">
+        <span class="eyebrow">当前已收录 40 道真实错题</span>
+        <h1>不看错题表，<br>直接再做一遍。</h1>
+        <p>像题库一样选择答案、立即判分、展开解析。多选题支持多选，掌握后可移出待复刷。</p>
+      </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js"></script>
-  <script src="cloud.js"></script>
-  <script src="app.js"></script>
+      <div class="stats-grid">
+        <div class="stat"><b id="answeredStat">0</b><span>已答题</span></div>
+        <div class="stat"><b id="accuracyStat">—</b><span>正确率</span></div>
+        <div class="stat"><b id="wrongStat">40</b><span>待掌握</span></div>
+      </div>
+
+      <section class="panel setup-panel">
+        <div class="panel-title"><div><small>开始一组</small><h2>选择今天的题</h2></div><span id="poolCount" class="count-pill">0 题可用</span></div>
+
+        <label>科目</label>
+        <div id="subjectChips" class="chips">
+          <button class="chip active" data-subject="全部">全部</button>
+          <button class="chip" data-subject="实务一">实务一</button>
+          <button class="chip" data-subject="基础">评估基础</button>
+          <button class="chip" data-subject="相关知识">相关知识</button>
+        </div>
+
+        <label for="chapterSelect">章节</label>
+        <select id="chapterSelect"><option value="全部">全部章节</option></select>
+
+        <label>今日模式</label>
+        <div id="modeChips" class="mode-grid">
+          <button class="mode active" data-count="10"><b>标准版</b><span>10 题</span></button>
+          <button class="mode" data-count="5"><b>保底版</b><span>5 题</span></button>
+          <button class="mode" data-count="2"><b>救命版</b><span>2 题</span></button>
+        </div>
+
+        <button id="startBtn" class="primary-btn">随机刷错题</button>
+        <div class="secondary-actions">
+          <button id="dueBtn" class="secondary-btn">今日到期 <span id="dueBadge">0</span></button>
+          <button id="wrongBookBtn" class="secondary-btn">全部未掌握 <span id="wrongBadge">40</span></button>
+          <button id="favoriteBtn" class="secondary-btn">我的收藏 <span id="favoriteBadge">0</span></button>
+        </div>
+      </section>
+
+      <p class="source-note">进度保存在当前浏览器。当前题库：实务一32题、相关知识7题、基础1题。</p>
+    </section>
+
+    <section id="quizView" class="view">
+      <div class="quiz-nav">
+        <button id="backBtn" class="icon-btn" aria-label="返回">←</button>
+        <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+        <span id="progressText">1/5</span>
+      </div>
+      <div id="questionMeta" class="question-meta"></div>
+      <article class="question-card">
+        <div class="question-head">
+          <span id="questionType" class="type-pill">单选题</span>
+          <button id="starBtn" class="star-btn" aria-label="收藏">☆</button>
+        </div>
+        <h2 id="questionText"></h2>
+        <div id="options" class="options"></div>
+        <p id="multipleHint" class="multiple-hint hidden">多选题：选择全部答案后再确认</p>
+      </article>
+      <button id="submitBtn" class="primary-btn sticky" disabled>确认答案</button>
+      <section id="answerPanel" class="answer-panel hidden">
+        <div id="resultLine" class="result-line"></div>
+        <div class="answer-row"><span>正确答案</span><b id="correctAnswer"></b></div>
+        <div class="answer-row original-row"><span>首次错误答案</span><b id="originalAnswer"></b></div>
+        <h3>解析</h3>
+        <p id="explanation"></p>
+        <p id="memory" class="memory hidden"></p>
+        <p id="source" class="source"></p>
+        <div class="answer-actions">
+          <button id="masterBtn" class="secondary-btn hidden">标记已掌握</button>
+          <button id="nextBtn" class="primary-btn">下一题</button>
+        </div>
+      </section>
+    </section>
+
+    <section id="resultView" class="view">
+      <div class="result-card">
+        <div id="resultEmoji" class="result-emoji">🌱</div>
+        <small>本组完成</small>
+        <h1 id="resultScore">4 / 5</h1>
+        <p id="resultMessage"></p>
+        <div class="result-stats"><span>用时 <b id="timeUsed">0分</b></span><span>本组答错 <b id="newWrong">0</b></span></div>
+        <button id="retryWrongBtn" class="primary-btn">重做本组错题</button>
+        <button id="homeBtn" class="secondary-btn full">返回首页</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="questions.js?v=2"></script>
+  <script src="app.js?v=2"></script>
 </body>
-</html>html>
-</b></b></label></label></span></span></p></p></h1></small></strong></div>
-</body></title>
-  </head>
+</html>
