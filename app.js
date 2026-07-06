@@ -9,15 +9,34 @@ const emptyData = () => ({
   favorites: [],
   mastered: [],
   history: {},
+  updatedAt: new Date(0).toISOString(),
 });
 
-let data;
-try {
-  data = { ...emptyData(), ...JSON.parse(localStorage.getItem(storeKey) || "{}") };
-} catch {
-  data = emptyData();
+function normalizeData(value) {
+  const input = value || {};
+  return {
+    ...emptyData(),
+    ...input,
+    answered: Number(input.answered || 0),
+    correct: Number(input.correct || 0),
+    favorites: [...new Set(input.favorites || [])],
+    mastered: [...new Set(input.mastered || [])],
+    history: input.history || {},
+    updatedAt: input.updatedAt || new Date(0).toISOString(),
+  };
 }
 
+function readLocal() {
+  try {
+    return normalizeData(JSON.parse(localStorage.getItem(storeKey) || "null"));
+  } catch {
+    return emptyData();
+  }
+}
+
+let data = readLocal();
+let signedIn = false;
+let syncTimer = null;
 let filter = { subject: "全部", chapter: "全部", count: 10 };
 let session = [];
 let index = 0;
@@ -31,16 +50,33 @@ const normalize = (letters) => [...letters].sort().join("");
 const shuffle = (items) => [...items].sort(() => Math.random() - 0.5);
 const isMastered = (id) => data.mastered.includes(id);
 const isDue = (question) => !isMastered(question.id) && question.reviewDate <= today();
-
-function save() {
-  localStorage.setItem(storeKey, JSON.stringify(data));
-  refreshHome();
-}
+const setSync = (text, state = "") => {
+  $("#syncStatus").textContent = text;
+  $("#syncStatus").className = `sync-status ${state}`.trim();
+};
 
 function show(id) {
   $$(".view").forEach((view) => view.classList.remove("active"));
   $(id).classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function save({ cloud = true } = {}) {
+  data.updatedAt = new Date().toISOString();
+  localStorage.setItem(storeKey, JSON.stringify(data));
+  refreshHome();
+  if (!cloud || !signedIn) return;
+  clearTimeout(syncTimer);
+  setSync("正在同步", "busy");
+  syncTimer = setTimeout(async () => {
+    try {
+      await PrivateCloud.saveState(data);
+      setSync("已同步", "ok");
+    } catch (error) {
+      console.error(error);
+      setSync("待联网同步");
+    }
+  }, 400);
 }
 
 function filteredQuestions({ includeMastered = false } = {}) {
@@ -195,6 +231,23 @@ function finish() {
   show("#resultView");
 }
 
+async function openCloudApp() {
+  setSync("正在读取", "busy");
+  const local = readLocal();
+  const remote = normalizeData(await PrivateCloud.loadState());
+  const hasRemote = new Date(remote.updatedAt).getTime() > 0;
+  data = hasRemote && new Date(remote.updatedAt) >= new Date(local.updatedAt) ? remote : local;
+  localStorage.setItem(storeKey, JSON.stringify(data));
+  signedIn = true;
+  if (!hasRemote || new Date(local.updatedAt) > new Date(remote.updatedAt)) {
+    await PrivateCloud.saveState(data);
+  }
+  $("#logoutBtn").classList.remove("hidden");
+  refreshHome();
+  setSync("已同步", "ok");
+  show("#homeView");
+}
+
 $("#subjectChips").addEventListener("click", (event) => {
   const button = event.target.closest(".chip");
   if (!button) return;
@@ -243,14 +296,80 @@ $("#masterBtn").addEventListener("click", () => {
 $("#retryWrongBtn").addEventListener("click", () => begin(shuffle(QUESTION_BANK.filter((q) => sessionWrong.includes(q.id)))));
 $("#homeBtn").addEventListener("click", () => show("#homeView"));
 $("#resetBtn").addEventListener("click", () => {
-  if (confirm("确定清空答题、掌握状态和收藏记录吗？")) {
+  if (confirm("确定清空所有设备上的答题、掌握状态和收藏记录吗？")) {
     data = emptyData();
     save();
   }
 });
 
+$("#loginForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const button = $("#loginBtn");
+  button.disabled = true;
+  $("#loginMessage").textContent = "正在登录并同步…";
+  try {
+    await PrivateCloud.signIn($("#emailInput").value.trim(), $("#passwordInput").value);
+    await openCloudApp();
+    $("#loginMessage").textContent = "";
+  } catch (error) {
+    $("#loginMessage").textContent = error.message || "登录失败，请检查邮箱和密码。";
+    setSync("未登录");
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$("#signupBtn").addEventListener("click", async () => {
+  const email = $("#emailInput").value.trim();
+  const password = $("#passwordInput").value;
+  const button = $("#signupBtn");
+  if (!email || password.length < 6) {
+    $("#loginMessage").textContent = "请先填写邮箱和至少6位密码。";
+    return;
+  }
+  button.disabled = true;
+  $("#loginMessage").textContent = "正在创建学习账号…";
+  try {
+    const result = await PrivateCloud.signUp(email, password);
+    if (result.session) {
+      await openCloudApp();
+      $("#loginMessage").textContent = "";
+    } else {
+      $("#loginMessage").textContent = "账号已创建。请到邮箱确认后，再回来登录。";
+    }
+  } catch (error) {
+    $("#loginMessage").textContent = error.message || "账号创建失败，请稍后再试。";
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$("#logoutBtn").addEventListener("click", async () => {
+  await PrivateCloud.signOut();
+  signedIn = false;
+  $("#logoutBtn").classList.add("hidden");
+  setSync("未登录");
+  show("#loginView");
+});
+
 chapters();
 refreshHome();
+
+(async () => {
+  if (!PrivateCloud.configured) {
+    $("#loginMessage").textContent = "云端尚未配置，请稍后再试。";
+    return;
+  }
+  try {
+    if (await PrivateCloud.session()) await openCloudApp();
+  } catch (error) {
+    console.error(error);
+    $("#loginMessage").textContent = error.message || "暂时无法连接云端。";
+    setSync("未登录");
+    show("#loginView");
+  }
+})();
+
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
 }

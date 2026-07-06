@@ -11,16 +11,37 @@
   <title>资产评估师错题题库</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark">评</span><div><strong>我的错题题库</strong><small>实务一 · 基础 · 相关知识</small></div></div>
-    <button id="resetBtn" class="text-btn">重置记录</button>
+    <div class="account-actions">
+      <span id="syncStatus" class="sync-status">未登录</span>
+      <button id="logoutBtn" class="text-btn hidden">退出</button>
+    </div>
   </header>
 
   <main class="shell">
-    <section id="homeView" class="view active">
+    <section id="loginView" class="view active">
+      <div class="login-card">
+        <span class="eyebrow">云端同步版</span>
+        <h1>同一账号登录，<br>手机电脑接着做。</h1>
+        <p>答题记录、收藏、已掌握和复刷进度会自动同步。</p>
+        <form id="loginForm">
+          <label for="emailInput">邮箱</label>
+          <input id="emailInput" type="email" autocomplete="username" required placeholder="你的登录邮箱">
+          <label for="passwordInput">密码</label>
+          <input id="passwordInput" type="password" autocomplete="current-password" required minlength="6" placeholder="至少6位">
+          <button id="loginBtn" class="primary-btn" type="submit">登录并同步</button>
+          <button id="signupBtn" class="secondary-btn full" type="button">首次使用，创建学习账号</button>
+        </form>
+        <p class="account-hint">手机和电脑使用同一邮箱登录即可。密码不会保存在题库网页中。</p>
+        <p id="loginMessage" class="login-message"></p>
+      </div>
+    </section>
+
+    <section id="homeView" class="view">
       <div class="hero">
         <span class="eyebrow">当前已收录 40 道真实错题</span>
         <h1>不看错题表，<br>直接再做一遍。</h1>
@@ -62,7 +83,8 @@
         </div>
       </section>
 
-      <p class="source-note">进度保存在当前浏览器。当前题库：实务一32题、相关知识7题、基础1题。</p>
+      <p class="source-note">已登录账号自动云同步。当前题库：实务一32题、相关知识7题、基础1题。</p>
+      <button id="resetBtn" class="danger-link">清空我的云端答题记录</button>
     </section>
 
     <section id="quizView" class="view">
@@ -110,7 +132,10 @@
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js?v=2"></script>
+  <script src="cloud.js?v=6"></script>
   <script src="questions.js?v=2"></script>
-  <script src="app.js?v=2"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

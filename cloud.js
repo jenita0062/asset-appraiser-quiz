@@ -48,24 +48,17 @@
     if (!client) return null;
     const current = await session();
     if (!current) return null;
-    const { data, error } = await client
-      .from("quiz_state")
-      .select("state,updated_at")
-      .eq("user_id", current.user.id)
-      .maybeSingle();
+    const { data, error } = await client.auth.getUser();
     if (error) throw error;
-    return data ? { ...data.state, updatedAt: data.updated_at } : null;
+    return data.user?.user_metadata?.quiz_state || null;
   }
 
   async function saveState(state) {
     if (!client) return;
     const current = await session();
     if (!current) return;
-    const updatedAt = state.updatedAt || new Date().toISOString();
-    const { error } = await client.from("quiz_state").upsert({
-      user_id: current.user.id,
-      state,
-      updated_at: updatedAt
+    const { error } = await client.auth.updateUser({
+      data: { quiz_state: state }
     });
     if (error) throw error;
   }
